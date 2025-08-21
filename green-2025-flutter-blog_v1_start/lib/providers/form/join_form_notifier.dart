@@ -11,7 +11,7 @@ class JoinModel {
   final String email;
   final String password;
 
-  // 각 필드의 검증 애러 메세지
+  // 각 필드의 검증 에러 메세지
   final String usernameError;
   final String emailError;
   final String passwordError;
@@ -79,27 +79,55 @@ class JoinFormNotifier extends Notifier<JoinModel> {
 
   // 이메일 입력시 : 즉시 검증 + 상태 업데이트 기능 구현
   void email(String email) {
-    final String error = validateEmail(email);
-    Logger().d(error);
+    final String emailError = validateEmail(email);
+
+    if (emailError.trim().isEmpty) {
+      Logger().d(email);
+    } else {
+      Logger().e(emailError);
+    }
 
     state = state.copyWith(
       email: email,
-      emailError: error,
+      emailError: emailError,
     );
   }
 
   // 비밀번호 입력시 : 즉시 검증 + 상태 업데이트 기능 구현
   void password(String password) {
-    final String error = validatePassword(password);
-    Logger().d(error);
+    final String passwordError = validatePassword(password);
+
+    if (passwordError.trim().isEmpty) {
+      Logger().d(password);
+    } else {
+      Logger().e(passwordError);
+    }
 
     state = state.copyWith(
       password: password,
-      passwordError: error,
+      passwordError: passwordError,
     );
   }
 
   // 최종 검증 - 회원 가입 버튼 누를 때 동작 처리
+  bool validate() {
+    // validateUsername -- 리턴 값은 뭘까?
+    // usernameError = "33...."; usernameError = "" --> "".isEmpty ---> true
+    String usernameError = validateUsername(state.username);
+    String emailError = validateEmail(state.email);
+    String passwordError = validatePassword(state.password);
+
+    if (usernameError.trim().isEmpty &&
+        emailError.trim().isEmpty &&
+        passwordError.trim().isEmpty) {
+      Logger().d("이름 값: ${state.username} / 이메일 값: ${state.email}");
+    } else {
+      Logger().e(
+          "이름 값 오류: $usernameError / 이메일 값 오류: $emailError / 비밀번호 값 오류: $passwordError");
+    }
+    //            T              &&        T           &&     T
+    return usernameError.isEmpty && emailError.isEmpty && passwordError.isEmpty;
+  }
 }
 
 // 1.3 실제 창고 개설

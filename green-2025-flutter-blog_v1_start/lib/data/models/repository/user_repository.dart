@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:dio/dio.dart';
 import 'package:flutter_blog/_core/utils/my_http.dart';
 import 'package:logger/logger.dart';
@@ -21,7 +23,7 @@ class UserRepository {
     return responseBody;
   }
 
-  // 로그인 요청
+  // 로그인 요청 - http 통신을 하고 문자열(json) 받아서 -- Map 구조로 파싱 처리 까지 책임
   Future<Map<String, dynamic>> login(String username, String password) async {
     final requestBody = {
       "username": username,
