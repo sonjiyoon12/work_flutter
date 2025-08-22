@@ -1,12 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_blog/_core/constants/size.dart';
+import 'package:flutter_blog/providers/global/session_notifier.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-class CustomNavigation extends StatelessWidget {
+// 창고에 접근할 수 있는 위젯으로 확장해야 한다.
+class CustomNavigation extends ConsumerWidget {
   final scaffoldKey;
   const CustomNavigation(this.scaffoldKey, {Key? key}) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    SessionNotifier sessionNotifier = ref.read(sessionProvider.notifier);
     return Container(
       width: getDrawerWidth(context),
       height: double.infinity,
@@ -33,7 +37,9 @@ class CustomNavigation extends StatelessWidget {
               ),
               const Divider(),
               TextButton(
-                onPressed: () {
+                onPressed: () async {
+                  // 로그아웃 기능 호출
+                  await sessionNotifier.logout();
                   scaffoldKey.currentState!.openEndDrawer();
                   Navigator.popAndPushNamed(context, "/login");
                 },
@@ -47,6 +53,17 @@ class CustomNavigation extends StatelessWidget {
                 ),
               ),
               const Divider(),
+              TextButton(
+                onPressed: () {},
+                child: Text(
+                  "내정보",
+                  style: TextStyle(
+                    fontSize: 20,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black54,
+                  ),
+                ),
+              ),
             ],
           ),
         ),

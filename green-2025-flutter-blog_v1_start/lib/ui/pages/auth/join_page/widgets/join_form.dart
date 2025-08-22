@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_blog/data/models/repository/user_repository.dart';
 import 'package:flutter_blog/providers/form/join_form_notifier.dart';
 import 'package:flutter_blog/providers/global/session_notifier.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -50,19 +49,27 @@ class JoinForm extends ConsumerWidget {
           const SizedBox(height: largeGap),
           CustomElevatedButton(
             text: "회원가입",
-            click: () {
-              // 최종 검증
+            click: () async {
               bool isValid = formNotifier.validate();
-              if (isValid) {
-                ref.read(sessionProvider.notifier).join(
-                      joinModel.username,
-                      joinModel.email,
-                      joinModel.password,
-                    );
-              } else {
+              if (isValid == false) {
                 ScaffoldMessenger.of(context).showSnackBar(
                   SnackBar(content: Text("유효성 검사 실패입니다")),
                 );
+                return;
+              }
+              final Map<String, dynamic> result =
+                  await ref.read(sessionProvider.notifier).join(
+                        joinModel.username,
+                        joinModel.email,
+                        joinModel.password,
+                      );
+              if (result["success"] == false) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text("${result["errorMessage"]}")),
+                );
+              } else {
+                // 회원가입 성공시 로그인 페이지로 이동 처리
+                Navigator.pushNamed(context, "/login");
               }
             },
           ),

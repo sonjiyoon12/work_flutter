@@ -37,21 +37,26 @@ class LoginForm extends ConsumerWidget {
         const SizedBox(height: largeGap),
         CustomElevatedButton(
           text: "로그인",
-          click: () {
+          click: () async {
             // 검증
             bool isValid = loginFormNotifier.validate();
-            if (isValid) {
-              // 전역 상태로 관리되는 세션 프로바이더에게 로그인 요청
-              ref.read(sessionProvider.notifier).login(
-                    loginModel.username,
-                    loginModel.password,
-                  );
-              // 서버로 로그인 통신 요청
-              // 서버로 로그인 요청 성공 한다면 페이지 이동..
-              // Navigator.popAndPushNamed(context, "/post/list");
-            } else {
+            if (isValid == false) {
               ScaffoldMessenger.of(context)
                   .showSnackBar(SnackBar(content: Text("유효성 검사 실패")));
+              return;
+            }
+
+            final result = await ref.read(sessionProvider.notifier).login(
+                  loginModel.username,
+                  loginModel.password,
+                );
+            if (result["success"] == false) {
+              ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(content: Text(result["errorMessage"])));
+            } else {
+              // 로그인 성공시 게시글 목록 화면으로 이동
+              Navigator.pushNamed(context, "/post/list");
+              // Navigator.popAndPushNamed(context, "/post/list");
             }
           },
         ),
