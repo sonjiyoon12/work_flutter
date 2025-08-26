@@ -3,7 +3,6 @@ import 'package:flutter_blog/providers/global/post/post_list_notifier.dart';
 import 'package:flutter_blog/ui/pages/post/detail_page/post_detail_page.dart';
 import 'package:flutter_blog/ui/pages/post/list_page/wiegets/post_list_item.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:logger/logger.dart';
 
 // Stateless + riverPod = ConsumerWidget
 // StatefulWidget +riverPod = ConsumerStatefulWidget
@@ -79,8 +78,12 @@ class _PostListBodyState extends ConsumerState<PostListBody> {
           itemBuilder: (context, index) {
             return InkWell(
               onTap: () {
-                Navigator.push(context,
-                    MaterialPageRoute(builder: (_) => PostDetailPage()));
+                // 해당 하는 게시글에 PK 값을 전달 해야 해당 정보를 불러올 수 있다.
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (_) =>
+                            PostDetailPage(postListModel.posts[index].id)));
               },
               child: PostListItem(postListModel.posts[index]),
             );
