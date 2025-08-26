@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
 
+// 재사용 가능한 위젯으로 설계 하기 위함.
+// 맞춤 기능을 추가 하기 위해 재 설계 한다.
 class CustomTextFormField extends StatelessWidget {
   final String hint;
   final bool obscureText;
   final TextEditingController controller;
-  final String? initValue;
+  final String? initValue; // 초기 값 (CustomTextFormField - 글쓰기, 글 수정)
+  // 콜백 메서드 추가 (String) { ... 구현 부 정의 }
+  final String? Function(String?)? validator;
 
   const CustomTextFormField({
     Key? key,
@@ -12,14 +16,16 @@ class CustomTextFormField extends StatelessWidget {
     this.obscureText = false,
     required this.controller,
     this.initValue = "",
+    this.validator, // 선택적 매개 변수 (옵션값) - 유효성 검사
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (initValue != null) {
+    if (initValue != null && initValue!.isNotEmpty) {
       controller.text = initValue!;
     }
     return TextFormField(
+      validator: validator,
       controller: controller,
       obscureText: obscureText,
       decoration: InputDecoration(
