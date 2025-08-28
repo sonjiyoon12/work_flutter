@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 
 // 재사용 가능한 위젯으로 설계 하기 위함.
 // 맞춤 기능을 추가 하기 위해 재 설계 한다.
-class CustomTextFormField extends StatelessWidget {
+class CustomTextFormField extends StatefulWidget {
   final String hint;
   final bool obscureText;
   final TextEditingController controller;
@@ -20,16 +20,32 @@ class CustomTextFormField extends StatelessWidget {
   }) : super(key: key);
 
   @override
-  Widget build(BuildContext context) {
-    if (initValue != null && initValue!.isNotEmpty) {
-      controller.text = initValue!;
+  State<CustomTextFormField> createState() => _CustomTextFormFieldState();
+}
+
+class _CustomTextFormFieldState extends State<CustomTextFormField> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initValue != null && widget.initValue!.isNotEmpty) {
+      widget.controller.text = widget.initValue!;
     }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
     return TextFormField(
-      validator: validator,
-      controller: controller,
-      obscureText: obscureText,
+      validator: widget.validator,
+      controller: widget.controller,
+      obscureText: widget.obscureText,
       decoration: InputDecoration(
-        hintText: "Enter $hint",
+        hintText: "Enter ${widget.hint}",
         enabledBorder: OutlineInputBorder(
           // 3. 기본 TextFormField 디자인
           borderRadius: BorderRadius.circular(20),

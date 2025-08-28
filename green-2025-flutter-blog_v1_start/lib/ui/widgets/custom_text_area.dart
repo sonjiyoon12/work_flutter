@@ -1,24 +1,48 @@
 import 'package:flutter/material.dart';
 
-class CustomTextArea extends StatelessWidget {
+class CustomTextArea extends StatefulWidget {
+  final String? initValue; // 초기 값
   final String hint;
   final TextEditingController controller;
   final String? Function(String?)? validator; // 콜백 메서드
 
   const CustomTextArea(
-      {Key? key, required this.hint, required this.controller, this.validator})
+      {Key? key,
+      this.initValue = "",
+      required this.hint,
+      required this.controller,
+      this.validator})
       : super(key: key);
+
+  @override
+  State<CustomTextArea> createState() => _CustomTextAreaState();
+}
+
+class _CustomTextAreaState extends State<CustomTextArea> {
+  @override
+  void initState() {
+    super.initState();
+    if (widget.initValue != null && widget.initValue!.isNotEmpty) {
+      widget.controller.text = widget.initValue!;
+    }
+  }
+
+  @override
+  void dispose() {
+    widget.controller.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 5),
       child: TextFormField(
-        validator: validator,
-        controller: controller,
+        validator: widget.validator,
+        controller: widget.controller,
         maxLines: 15,
         decoration: InputDecoration(
-          hintText: "Enter $hint",
+          hintText: "Enter ${widget.hint}",
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(20),
           ),

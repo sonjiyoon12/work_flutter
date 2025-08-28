@@ -52,7 +52,7 @@ class LoginModel {
 } // emd of loginModel class
 
 // 창고 매뉴얼 설계 - 비즈니스 로직 + 상태
-class LoginFormNotifier extends Notifier<LoginModel> {
+class LoginFormNotifier extends AutoDisposeNotifier<LoginModel> {
   // 반드시 이 값이 필요하다는 강제성 부여
   @override
   LoginModel build() {
@@ -96,7 +96,8 @@ class LoginFormNotifier extends Notifier<LoginModel> {
 
 // 실제 창고를 메모리에 올리자 - 전역 변수로 관리
 final loginFormProvider =
-    NotifierProvider<LoginFormNotifier, LoginModel>(() => LoginFormNotifier());
+    AutoDisposeNotifierProvider<LoginFormNotifier, LoginModel>(
+        () => LoginFormNotifier());
 // loginFormProvider --> LoginFormNotifier() --> LoginModel()
 // ref.read(loginFormProvider);    --> LoginModel()
 // ref.read(loginFormProvider.notifier); --> LoginFormNotifier()

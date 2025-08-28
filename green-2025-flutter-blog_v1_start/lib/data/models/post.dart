@@ -39,6 +39,26 @@ class Post {
         user = User.fromMap(data['user']),
         bookmarkCount = data['bookmarkCount'];
 
+  Post copyWith({
+    int? id,
+    String? title,
+    String? content,
+    User? user,
+    DateTime? createdAt,
+    DateTime? updatedAt,
+    int? bookmarkCount,
+  }) {
+    return Post(
+      id: id ?? this.id,
+      title: title ?? this.title,
+      content: content ?? this.content,
+      user: user ?? this.user,
+      createdAt: createdAt ?? this.createdAt,
+      updatedAt: updatedAt ?? this.updatedAt,
+      bookmarkCount: bookmarkCount ?? this.bookmarkCount,
+    );
+  }
+
   // 디버깅용
   @override
   String toString() {

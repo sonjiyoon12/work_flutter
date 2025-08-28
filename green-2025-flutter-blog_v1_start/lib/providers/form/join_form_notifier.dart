@@ -52,7 +52,7 @@ class JoinModel {
 }
 
 /// 1.2 창고 매뉴얼 설계
-class JoinFormNotifier extends Notifier<JoinModel> {
+class JoinFormNotifier extends AutoDisposeNotifier<JoinModel> {
   // 초기 상태값을 명시해주어야 한다.
   @override
   JoinModel build() {
@@ -131,5 +131,5 @@ class JoinFormNotifier extends Notifier<JoinModel> {
 }
 
 // 1.3 실제 창고 개설
-final joinProvider =
-    NotifierProvider<JoinFormNotifier, JoinModel>(() => JoinFormNotifier());
+final joinProvider = AutoDisposeNotifierProvider<JoinFormNotifier, JoinModel>(
+    () => JoinFormNotifier());

@@ -36,8 +36,9 @@ class PostDetailButtons extends ConsumerWidget {
         ),
         IconButton(
           onPressed: () {
-            Navigator.push(
-                context, MaterialPageRoute(builder: (_) => PostUpdatePage()));
+            // 수정하기 화면 이동(데이터를 여기서 던져 줘야 된다)
+            Navigator.push(context,
+                MaterialPageRoute(builder: (_) => PostUpdatePage(post)));
           },
           icon: const Icon(CupertinoIcons.pen),
         ),
