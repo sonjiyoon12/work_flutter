@@ -116,8 +116,10 @@ class ChatRepository {
   void _handleIncomingMessage(String messageBody) {
     try {
       print("들어온 메세지 확인 : ${messageBody}");
-      final jsonData = jsonDecode(messageBody);
-      final dto = ChatMessageDto.fromJson(jsonData);
+      // 코드 리뷰
+      // jsonDecode : 네트워크를 통해서 들어온 json 문자열 형식을 역직렬화(파싱)
+      final Map<String, dynamic> jsonData = jsonDecode(messageBody);
+      final ChatMessageDto dto = ChatMessageDto.fromJson(jsonData);
       final ChatMessage message = dto.toModel();
       onMessage?.call(message);
     } catch (e) {
